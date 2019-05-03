@@ -9,7 +9,11 @@ import (
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
-	http.FileServer(http.Dir("./readme.html"))
+	// set header
+	fmt.Print(" hello index")
+	p := "./index.html"
+	w.Header().Set("Content-type", "text/html")
+	http.ServeFile(w, r, p)
 }
 
 func main() {
