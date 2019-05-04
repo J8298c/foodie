@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Venue defines struct for venues
 type Venue struct {
 	Name     string
 	Location string
@@ -17,6 +18,7 @@ type Venue struct {
 	Dishes   []Dish
 }
 
+// Dish defines struct for dishes
 type Dish struct {
 	Name        string
 	Description string
