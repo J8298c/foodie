@@ -16,11 +16,11 @@ func index(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, p)
 }
 
-func getAllVenues() {
+func getAllVenues(w http.ResponseWriter, r *http.Request) {
 	fmt.Print("Getting all venue")
 }
 
-func getSingleVenue() {
+func getSingleVenue(w http.ResponseWriter, r *http.Request) {
 	fmt.Print("Getting a single venue")
 }
 
@@ -32,9 +32,15 @@ func addDishToVenue() {
 	fmt.Print("add a dish to the venue")
 }
 
+func editVenue() {
+	fmt.Print("edit a venue")
+}
+
 func main() {
 	fmt.Print("hello")
 	r := mux.NewRouter()
 	r.HandleFunc("/", index)
+	r.HandleFunc("/venues/all", getAllVenues)
+	r.HandleFunc("/venues/{id}", getSingleVenue)
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
