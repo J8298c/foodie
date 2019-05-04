@@ -8,6 +8,22 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type Venue struct {
+	Name     string
+	Location string
+	Phone    string
+	Rating   int
+	Genre    string
+	Dishes   []Dish
+}
+
+type Dish struct {
+	Name        string
+	Description string
+	Price       int
+	rating      int
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 	// set header
 	fmt.Print(" hello index")
