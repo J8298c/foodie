@@ -16,12 +16,20 @@ func index(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, p)
 }
 
-func getAllRestaurants() {
-	fmt.Print("Getting all restaurants")
+func getAllVenues() {
+	fmt.Print("Getting all venue")
 }
 
-func getARestaurant() {
-	fmt.Print("Getting a single Restaurant")
+func getSingleVenue() {
+	fmt.Print("Getting a single venue")
+}
+
+func createVenue() {
+	fmt.Print("creating a venue")
+}
+
+func addDishToVenue() {
+	fmt.Print("add a dish to the venue")
 }
 
 func main() {
