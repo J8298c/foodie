@@ -16,6 +16,14 @@ func index(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, p)
 }
 
+func getAllRestaurants() {
+	fmt.Print("Getting all restaurants")
+}
+
+func getARestaurant() {
+	fmt.Print("Getting a single Restaurant")
+}
+
 func main() {
 	fmt.Print("hello")
 	r := mux.NewRouter()
