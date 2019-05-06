@@ -46,7 +46,7 @@ func getAllVenues(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	collection := client.Database("yumgum").Collection("restaurants")
+	collection := client.Database("yumgum").Collection("venues")
 	cur, err := collection.Find(ctx, bson.D{})
 	if err != nil {
 		log.Fatal(err)
@@ -71,7 +71,19 @@ func getSingleVenue(w http.ResponseWriter, r *http.Request) {
 	fmt.Print("Getting a single venue")
 	vars := mux.Vars(r)
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "id: %v\n", vars["id"])
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+	if err != nil {
+		panic(err)
+	}
+	filter := bson.M{"_id": vars["id"]}
+	var results bson.M
+	collection := client.Database("yumgum").Collection("venues")
+	err = collection.FindOne(ctx, filter).Decode(&results)
+	if err != nil {
+		fmt.Print(err)
+	}
+	fmt.Fprintf(w, "id: %v\n", results)
 }
 
 func createVenue(w http.ResponseWriter, r *http.Request) {
