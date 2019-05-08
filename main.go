@@ -1,12 +1,19 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+const uri = "mongodb://localhost/yumgum"
 
 // Venue defines struct for venues
 type Venue struct {
@@ -35,8 +42,31 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func getAllVenues(w http.ResponseWriter, r *http.Request) {
-	//TODO: share mongo connection dont do it per request
-	fmt.Print("fetching all venues")
+	fmt.Print("Getting all venue")
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+	if err != nil {
+		panic(err)
+	}
+	collection := client.Database("yumgum").Collection("venues")
+	cur, err := collection.Find(ctx, bson.D{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cur.Close(ctx)
+
+	for cur.Next(ctx) {
+		var result bson.M
+		err := cur.Decode(&result)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Fprintf(w, "results: %v\n", result)
+	}
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func getSingleVenue(w http.ResponseWriter, r *http.Request) {
@@ -58,6 +88,7 @@ func editVenue(w http.ResponseWriter, r *http.Request) {
 func main() {
 	fmt.Print("hello")
 	r := mux.NewRouter()
+
 	r.HandleFunc("/", index).Methods("GET")
 	r.HandleFunc("/venues/all", getAllVenues).Methods("GET")
 	r.HandleFunc("/venues/{id}", getSingleVenue).Methods("GET")
