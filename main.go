@@ -26,9 +26,32 @@ func addTask(task string) {
 	fmt.Println("Enter 1: to continue \n Enter 2: to quit")
 }
 
+func choosePath(input int) {
+	reader := bufio.NewReader(os.Stdin)
+	switch input {
+	case 1:
+		fmt.Println("Please enter your task")
+		task, err := reader.ReadString('\n')
+		if err != nil {
+			panic(err)
+		}
+		addTask(task)
+		break
+	case 2:
+		fmt.Print("You have entered 2: ", input)
+		break
+	case 3:
+		fmt.Print("You entered 3: ", input)
+		break
+	case 4:
+		fmt.Print("You entered 4: ", input)
+		break
+	}
+}
+
 func main() {
 	var i int
-	reader := bufio.NewReader(os.Stdin)
+
 	fmt.Println("welcome julio what can jarvis help you with today")
 	fmt.Println(`
 	  I can help you with your tasks please enter what you would like to do:
@@ -43,23 +66,6 @@ func main() {
 		fmt.Println("Please enter a NUMBER from 1 - 4")
 	}
 
-	switch i {
-	case 1:
-		fmt.Println("Please enter your task")
-		task, _ := reader.ReadString('\n')
-		if err != nil {
-			panic(err)
-		}
-		addTask(task)
-		break
-	case 2:
-		fmt.Print("You have entered 2: ", i)
-		break
-	case 3:
-		fmt.Print("You entered 3: ", i)
-		break
-	case 4:
-		fmt.Print("You entered 4: ", i)
-		break
-	}
+	choosePath(i)
+
 }
