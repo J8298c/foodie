@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -20,11 +22,13 @@ func addTask(task string) {
 	collection := client.Database("todo_cli").Collection("tasks")
 	currentTime := time.Now()
 	collection.InsertOne(ctx, bson.M{"task": task, "created_on": currentTime.Local()})
+	fmt.Println("is that all mi grace")
+	fmt.Println("Enter 1: to continue \n Enter 2: to quit")
 }
 
 func main() {
 	var i int
-
+	reader := bufio.NewReader(os.Stdin)
 	fmt.Println("welcome julio what can jarvis help you with today")
 	fmt.Println(`
 	  I can help you with your tasks please enter what you would like to do:
@@ -41,9 +45,8 @@ func main() {
 
 	switch i {
 	case 1:
-		var task string
 		fmt.Println("Please enter your task")
-		_, err := fmt.Scanf("%d", &task)
+		task, _ := reader.ReadString('\n')
 		if err != nil {
 			panic(err)
 		}
